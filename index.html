@@ -2,11 +2,25 @@
 <head>
     <meta charset="UTF-8">
     <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.min.js"></script>
+    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 
     <script language="javascript" type="text/javascript" src="sketch.js"></script>
     <script language="javascript" type="text/javascript" src="ga.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+        }
+
+    </style>
 </head>
 
 <body>
+    <canvas id="myChart" width="400" height="400" style="max-height: 400px; max-width: 400px;"></canvas>
+    <div id="sketch-holder">
+        <!-- Our sketch will go here! -->
+    </div>
 </body>
 </html>

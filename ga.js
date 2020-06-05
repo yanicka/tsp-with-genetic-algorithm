@@ -14,20 +14,12 @@ function calculateFitness(population) {
     for (var i = 0; i < population.individuals.length; i++) {
         var d = calcDistance(cities, population.individuals[i]);
 
-        /*textSize(64);
-        var s = '';
-        for(var i = 0; i < cities; i++){
-            s += population[i];
-        }
-        textSize(64);
-        fill (255);
-        text(d, 20, height / 2);*/
-
-
         if (d < population.recordDistance) {
             population.recordDistance = d;
+            population.distanceHistory.push(d)
             population.bestEver = population.individuals[i];
         }
+
         if (d < population.currentRecord) {
             population.currentRecord = d;
             population.currentBest = population.individuals[i];
@@ -52,7 +44,6 @@ function normalizeFitness(population) {
 
 function nextGeneration(population) {
     var newPopulation = [];
-    console.log(population)
     for (var i = 0; i < population.individuals.length; i++) {
         var orderA = pickOne(population.individuals, population.fitness);
         var orderB = pickOne(population.individuals, population.fitness);
@@ -88,10 +79,8 @@ function getCanonical() {
 function crossOver(type, orderA, orderB) {
     //console.log(type, orderA, orderB)
     if (type === "original") {
-        console.log('original')
         return originalCrossover(orderA, orderB)
     } else if (type === "ordinalOnePoint") {
-        console.log('ordinalOnePoint')
         return ordinalOnePointCrossover(orderA, orderB)
     } else {
         console.log('Unknown crossover selected')
@@ -138,8 +127,12 @@ function ordinalOnePointCrossover(orderA, orderB) {
     //console.log('offspringA:', offspringA)
     //console.log('offspringB:', offspringB)
 
+    const calcFitness = (offspring) => {
+        let d = calcDistance(cities, offspring)
+        return 1 / (pow(d, 8) + 1)
+    }
 
-    return offspringA
+    return calcFitness(offspringA) > calcFitness(offspringB) ? offspringA : offspringB
 }
 
 function originalCrossover(orderA, orderB) {

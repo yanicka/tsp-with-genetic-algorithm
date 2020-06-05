@@ -10,9 +10,9 @@
 // https://editor.p5js.org/codingtrain/sketches/EGjTrkkf9
 
 var cities = [];
-var totalCities = 7;
+var totalCities = 20;
 
-var popSize = 10;
+var popSize = 1000;
 let populations = [
     {
         crossoverType: 'original',
@@ -21,6 +21,7 @@ let populations = [
         bestEver: undefined,
         currentBest: 0,
         recordDistance: Infinity,
+        distanceHistory: [],
         currentRecord: undefined,
         individuals: [],
     },
@@ -31,6 +32,7 @@ let populations = [
         bestEver: undefined,
         currentBest: 0,
         recordDistance: Infinity,
+        distanceHistory: [],
         currentRecord: undefined,
         individuals: []
     },
@@ -38,9 +40,54 @@ let populations = [
 
 var statusP;
 
+let ctx, chart
+
+const getGraphData = () => {
+    return {
+        labels: [],
+        datasets: populations.map((population) => {
+            return {
+                label: population.crossoverType,
+                borderColor: population.color,
+                data: population.distanceHistory
+            }
+        })
+    }
+}
+
+let run = 0;
+const updateChart = () => {
+    chart.data.labels.push(run)
+    run++;
+    chart.update()
+}
+
+var callback = function(){
+    ctx = document.getElementById('myChart')
+    chart = new Chart(ctx, {
+        type: 'line',
+        data:  getGraphData()
+    })
+};
+
+if (
+    document.readyState === "complete" ||
+    (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+    callback();
+} else {
+    document.addEventListener("DOMContentLoaded", callback);
+}
+
+console.log(ctx)
+
+
+
+
 function setup() {
-    createCanvas(800, 800);
-    frameRate(2)
+    let canvas = createCanvas(800, 800);
+    canvas.parent('sketch-holder')
+    frameRate(1)
     var order = [];
     for (var i = 0; i < totalCities; i++) {
         var v = createVector(random(width), random(height / 2));
@@ -68,6 +115,7 @@ function draw() {
         calculateFitness(population);
         normalizeFitness(population);
         nextGeneration(population);
+        updateChart()
 
         stroke(population.color);
         strokeWeight(4);
