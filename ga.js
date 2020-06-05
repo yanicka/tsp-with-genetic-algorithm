@@ -76,15 +76,72 @@ function getCanonical() {
     return [...Array(totalCities).keys()];
 }
 
+function generateBitMask() {
+    const randomHex = (len) => {
+        var maxlen = 8,
+            min = Math.pow(16,Math.min(len,maxlen)-1)
+        max = Math.pow(16,Math.min(len,maxlen)) - 1,
+            n   = Math.floor( Math.random() * (max-min+1) ) + min,
+            r   = n.toString(16);
+        while ( r.length < len ) {
+            r = r + randHex( len - maxlen );
+        }
+        return r;
+    }
+
+    const hex = randomHex(Math.ceil(totalCities/4))
+    return parseInt(hex, 16).toString(2).padStart(8, '0').split('').map((value) => parseInt(value))
+}
+
+const calcFitnessForOffspring = (offspring) => {
+    let d = calcDistance(cities, offspring)
+    return 1 / (pow(d, 8) + 1)
+}
+
 function crossOver(type, orderA, orderB) {
     //console.log(type, orderA, orderB)
     if (type === "original") {
         return originalCrossover(orderA, orderB)
     } else if (type === "ordinalOnePoint") {
         return ordinalOnePointCrossover(orderA, orderB)
+    } else if (type === "orderedCrossover") {
+        return orderedCrossover(orderA, orderB)
     } else {
         console.log('Unknown crossover selected')
     }
+}
+
+function orderedCrossover(orderA, orderB) {
+    // console.log('orderA:', orderA)
+    // console.log('orderB:', orderB)
+    const mask = generateBitMask()
+    // console.log('Mask:', mask)
+
+    const deriveOrderedChild = (parentA, parentB) => {
+        let clonedB = [...parentB]
+        const maskedA = parentA.map((value, position) => {
+            if (mask[position] === 1) {
+                clonedB.splice(clonedB.indexOf(value), 1)
+                return value
+            }
+        })
+
+        return maskedA.map((value, position) => {
+            if (value === undefined) {
+                return clonedB.shift()
+            }
+
+            return value
+        })
+    }
+
+    const offspringA = deriveOrderedChild(orderA, orderB)
+    const offspringB = deriveOrderedChild(orderB, orderA)
+
+    // console.log('offspringA:', offspringA)
+    // console.log('offspringB:', offspringB)
+
+    return calcFitnessForOffspring(offspringA) > calcFitnessForOffspring(offspringB) ? offspringA : offspringB
 }
 
 function ordinalOnePointCrossover(orderA, orderB) {
@@ -127,12 +184,7 @@ function ordinalOnePointCrossover(orderA, orderB) {
     //console.log('offspringA:', offspringA)
     //console.log('offspringB:', offspringB)
 
-    const calcFitness = (offspring) => {
-        let d = calcDistance(cities, offspring)
-        return 1 / (pow(d, 8) + 1)
-    }
-
-    return calcFitness(offspringA) > calcFitness(offspringB) ? offspringA : offspringB
+    return calcFitnessForOffspring(offspringA) > calcFitnessForOffspring(offspringB) ? offspringA : offspringB
 }
 
 function originalCrossover(orderA, orderB) {

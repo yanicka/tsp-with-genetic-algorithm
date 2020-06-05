@@ -10,11 +10,11 @@
 // https://editor.p5js.org/codingtrain/sketches/EGjTrkkf9
 
 var cities = [];
-var totalCities = 20;
+var totalCities = 7;
 
 var popSize = 1000;
 let populations = [
-    {
+    /*{
         crossoverType: 'original',
         color: '#8C1C13',
         fitness: [],
@@ -24,10 +24,21 @@ let populations = [
         distanceHistory: [],
         currentRecord: undefined,
         individuals: [],
-    },
+    },*/
     {
         crossoverType: 'ordinalOnePoint',
         color: '#E2EF70',
+        fitness: [],
+        bestEver: undefined,
+        currentBest: 0,
+        recordDistance: Infinity,
+        distanceHistory: [],
+        currentRecord: undefined,
+        individuals: []
+    },
+    {
+        crossoverType: 'orderedCrossover',
+        color: '#008080',
         fitness: [],
         bestEver: undefined,
         currentBest: 0,
@@ -81,13 +92,10 @@ if (
 
 console.log(ctx)
 
-
-
-
 function setup() {
     let canvas = createCanvas(800, 800);
     canvas.parent('sketch-holder')
-    frameRate(1)
+    frameRate(0.3)
     var order = [];
     for (var i = 0; i < totalCities; i++) {
         var v = createVector(random(width), random(height / 2));
@@ -110,12 +118,11 @@ function setup() {
 function draw() {
     background(0);
 
-    populations.forEach((population) => {
+    for(let [_index, population] of Object.entries(populations)) {
+        console.log(population)
         // GA
         calculateFitness(population);
         normalizeFitness(population);
-        nextGeneration(population);
-        updateChart()
 
         stroke(population.color);
         strokeWeight(4);
@@ -140,16 +147,13 @@ function draw() {
             ellipse(cities[n].x, cities[n].y, 16, 16);
         }
         endShape();
-    })
-}
 
-// function shuffle(a, num) {
-//   for (var i = 0; i < num; i++) {
-//     var indexA = floor(random(a.length));
-//     var indexB = floor(random(a.length));
-//     swap(a, indexA, indexB);
-//   }
-// }
+
+        nextGeneration(population);
+    }
+
+    updateChart()
+}
 
 function swap(a, i, j) {
     var temp = a[i];
