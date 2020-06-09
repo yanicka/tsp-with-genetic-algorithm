@@ -56,6 +56,14 @@ canvas {
 	
 	{width}:{height}
 
+	Current Records:
+
+	<ul>
+	{#each $populations as population}
+		<li>{population.crossoverType}:&nbsp;{population.recordDistance}</li>
+	{/each}
+	</ul>
+
 
 
 	<hr/>

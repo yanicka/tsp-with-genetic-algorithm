@@ -4,7 +4,7 @@ import { populationCount, populations, cities, totalCitiesCount } from '../../st
 
 import { calcDistance } from '../city-helpers'
 import { pickOne, swap} from './helpers'
-import { orderedCrossover, originalCrossover, ordinalOnePointCrossover } from './crossovers'
+import { orderedCrossover, originalCrossover, ordinalOnePointCrossover, edgeRecombinationCrossover } from './crossovers'
 
 const shuffle = ([...array]) => {
   return array.sort(() => Math.random() - 0.5);
@@ -101,7 +101,9 @@ function crossOver(type, orderA, orderB) {
   } else if (type === "ordinalOnePoint") {
     return ordinalOnePointCrossover(orderA, orderB)
   } else if (type === "orderedCrossover") {
-    return orderedCrossover(orderA, orderB)
+		return orderedCrossover(orderA, orderB)
+	} else if (type === "edgeRecombinationCrossover") {
+		return edgeRecombinationCrossover(orderA, orderB)
   } else {
     console.log('Unknown crossover selected')
   }

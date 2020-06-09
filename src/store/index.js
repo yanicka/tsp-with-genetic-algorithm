@@ -5,6 +5,7 @@ export let cities = writable([]);
 
 export const populationCount = readable(1000);
 export let populations = writable([
+	/*
   {
     crossoverType: 'original',
     color: '#8C1C13',
@@ -15,7 +16,7 @@ export let populations = writable([
     distanceHistory: [],
     currentRecord: Infinity,
     individuals: [],
-  },
+  },*/
   {
     crossoverType: 'ordinalOnePoint',
     color: '#E2EF70',
@@ -37,5 +38,16 @@ export let populations = writable([
     distanceHistory: [],
     currentRecord: Infinity,
     individuals: []
-  },
+	},
+	{
+    crossoverType: 'edgeRecombinationCrossover',
+    color: '#CCF5AC',
+    fitness: [],
+    bestEver: undefined,
+    currentBest: undefined,
+    recordDistance: Infinity,
+    distanceHistory: [],
+    currentRecord: Infinity,
+    individuals: []
+	},
 ]);
