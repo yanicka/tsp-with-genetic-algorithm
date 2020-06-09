@@ -3,6 +3,10 @@ import { writable, readable } from 'svelte/store';
 export const totalCitiesCount = readable(15);
 export let cities = writable([]);
 
+const maxRuns = 100
+export const runs = readable(maxRuns)
+export const runCounter = writable(maxRuns)
+
 export const populationCount = readable(1000);
 export let populations = writable([
 	/*

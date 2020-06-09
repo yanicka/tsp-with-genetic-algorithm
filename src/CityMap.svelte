@@ -39,4 +39,11 @@ onMount(() => {
 
 </script>
 
+<style lang="scss" scoped>
+  canvas {
+    padding: 20px;
+    border: 1px solid #313131;
+  }
+</style>
+
 <canvas bind:this={canvas} width={width} height={height}/>

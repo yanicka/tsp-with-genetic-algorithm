@@ -5,8 +5,6 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import autoPreprocess from 'svelte-preprocess';
 
-import postcss from 'rollup-plugin-postcss'
-
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
@@ -28,7 +26,6 @@ export default {
 			},
 			preprocess: autoPreprocess()
 		}),
-		postcss({ extract: true }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
