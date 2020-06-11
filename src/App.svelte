@@ -22,7 +22,7 @@
 					return ['crossOver', ...$populations.map((population) => population.crossoverType)]
 				case 1:
 					// console.log(0x00001, ['Best', ...$populations.map((population) => Math.min(...population.distanceHistory))])
-					return ['Best', ...$populations.map((population) => Math.min(...population.distanceHistory))]
+					return ['Best', ...$populations.map((population) => Math.min(...population.distanceHistory).toString().replace('.', ','))]
 				case 2:
 					// console.log(0x00002,)
 					return ['Median']
@@ -36,16 +36,16 @@
 					const runIndex = rowIndex - 5
 					return [runIndex, ...$populations.map((population) => {
 						if (runIndex < population.distanceHistory.length) {
-							return population.distanceHistory[runIndex]
+							return population.distanceHistory[runIndex].toString().replace('.', ',')
 						}
 					})]
 			}
 		})
 
-		console.log(dataRows[0].join(','), dataRows[5].join(','))
+		console.log(dataRows[0].join(';'), dataRows[5].join(';'))
 		
 		let csvContent = "data:text/csv;charset=utf-8," 
-    		+ dataRows.map(e => e.join(",")).join("\n");
+    		+ dataRows.map(e => {console.log(typeof e, e); return e.join(";")}).join("\n");
 
 		let encodedUri = encodeURI(csvContent);
 		window.open(encodedUri);
