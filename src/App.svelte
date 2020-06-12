@@ -36,16 +36,19 @@
 					const runIndex = rowIndex - 5
 					return [runIndex, ...$populations.map((population) => {
 						if (runIndex < population.distanceHistory.length) {
-							return population.distanceHistory[runIndex].toString().replace('.', ',')
+							if (population.distanceHistory[runIndex] !== undefined)
+								return population.distanceHistory[runIndex].toString().replace('.', ',')
+							else
+								return ''
 						}
 					})]
 			}
 		})
 
-		console.log(dataRows[0].join(';'), dataRows[5].join(';'))
+		//console.log(dataRows[0].join(';'), dataRows[5].join(';'))
 		
 		let csvContent = "data:text/csv;charset=utf-8," 
-    		+ dataRows.map(e => {console.log(typeof e, e); return e.join(";")}).join("\n");
+    		+ dataRows.map(e => {return e.join(";")}).join("\n");
 
 		let encodedUri = encodeURI(csvContent);
 		window.open(encodedUri);

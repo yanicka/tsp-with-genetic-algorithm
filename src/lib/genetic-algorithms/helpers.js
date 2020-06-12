@@ -3,7 +3,18 @@ import { totalCitiesCount, cities } from '../../store'
 
 import { calcDistance } from '../city-helpers'
 
-function pickOne(list, prob) {
+function pickOne(individuals, prob) {
+	const fitnessSum = prob.reduce((sum, fitness) => sum + fitness, 0)
+	let roll = Math.random() * fitnessSum
+
+	for (let i = 0; i < individuals.length; i++) {
+		if (roll < prob[i]) {
+			return individuals[i]
+		}
+		roll -= prob[i]
+	}
+
+	/*
   var index = 0;
   var r = Math.random();
 
@@ -12,7 +23,8 @@ function pickOne(list, prob) {
     index++;
   }
   index--;
-  return list[index].slice();
+	return individuals[index].slice();
+	*/
 }
 
 const calcFitnessForOffspring = (offspring) => {

@@ -3,7 +3,7 @@ import { writable, readable } from 'svelte/store';
 export const totalCitiesCount = readable(15);
 export let cities = writable([]);
 
-const maxRuns = 100
+const maxRuns = 1000
 export const runs = readable(maxRuns)
 export const runCounter = writable(maxRuns)
 
@@ -28,7 +28,7 @@ export let populations = writable([
     bestEver: undefined,
     currentBest: undefined,
     recordDistance: Infinity,
-    distanceHistory: [],
+    distanceHistory: Array(maxRuns),
     currentRecord: Infinity,
     individuals: []
   },
@@ -39,7 +39,7 @@ export let populations = writable([
     bestEver: undefined,
     currentBest: undefined,
     recordDistance: Infinity,
-    distanceHistory: [],
+    distanceHistory: Array(maxRuns),
     currentRecord: Infinity,
     individuals: []
 	},
@@ -50,7 +50,7 @@ export let populations = writable([
     bestEver: undefined,
     currentBest: undefined,
     recordDistance: Infinity,
-    distanceHistory: [],
+    distanceHistory: Array(maxRuns),
     currentRecord: Infinity,
     individuals: []
 	},

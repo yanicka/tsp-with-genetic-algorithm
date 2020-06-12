@@ -1,6 +1,6 @@
 import { onDestroy } from 'svelte';
 import { get } from 'svelte/store';
-import { populationCount, populations, cities, totalCitiesCount } from '../../store'
+import { populationCount, populations, cities, totalCitiesCount, runs, runCounter } from '../../store'
 
 import { calcDistance } from '../city-helpers'
 import { pickOne, swap} from './helpers'
@@ -54,14 +54,15 @@ const stop = () => {
 }
 
 const calculateFitness = (population) => {
-  let currentRecord = Infinity;
+	let currentRecord = Infinity;
+	let currentRun = get(runs) - get(runCounter) 
 
   return population.individuals.map((individual) => {
     var distance = calcDistance(individual);
 
     if (distance < population.recordDistance) {
       population.recordDistance = distance;
-      population.distanceHistory.push(distance)
+      population.distanceHistory[currentRun] = distance
       population.bestEver = individual;
     }
 
@@ -89,7 +90,7 @@ function nextGeneration(population) {
     const parentA = pickOne(population.individuals, population.fitness);
     const parentB = pickOne(population.individuals, population.fitness);
     let offspring = crossOver(population.crossoverType, parentA, parentB);
-    mutate(offspring, 0.01);
+    mutate(offspring, 0.1);
     return offspring
   })
 }
